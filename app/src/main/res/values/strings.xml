@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Geocache</string>
+    <string name="letsgo">Get Started!</string>
+    <string name="left_arrow">\u2190</string>
+    <string name="up_arrow">\u2191</string>
+    <string name="down_arrow">\u2193</string>
+    <string name="right_arrow">\u2192</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+</resources>
