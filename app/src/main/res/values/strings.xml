@@ -15,4 +15,5 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="prompt_location_description">"A geocache entry will be generated based on your current location, please enter a brief description of its location(No more than 50 characters)"</string>
 </resources>
