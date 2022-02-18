@@ -1,6 +1,17 @@
 package com.example.geocache.data;
 
+import android.util.Log;
+
+import com.example.geocache.R;
 import com.example.geocache.data.model.LoggedInUser;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Class that requests authentication and user information from the remote data source and

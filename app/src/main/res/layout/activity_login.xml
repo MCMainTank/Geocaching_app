@@ -68,11 +68,17 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="322dp"
-        android:layout_height="37dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="83dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="42dp"
         android:text="@string/welcome"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="67dp" />
+        app:layout_constraintBottom_toTopOf="@+id/username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

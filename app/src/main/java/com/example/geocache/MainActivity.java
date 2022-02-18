@@ -2,11 +2,14 @@ package com.example.geocache;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.geocache.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "onTouch: ");
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
+
 
 
 //            @Override

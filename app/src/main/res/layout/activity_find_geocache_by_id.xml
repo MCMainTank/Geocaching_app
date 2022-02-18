@@ -15,4 +15,18 @@
         tools:layout_editor_absoluteX="56dp"
         tools:layout_editor_absoluteY="0dp" />
 
+    <Button
+        android:id="@+id/button_1"
+        android:layout_width="49dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="420dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="@drawable/btn_color_selector"
+        android:foreground="@drawable/ic_baseline_arrow_forward_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.906"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
