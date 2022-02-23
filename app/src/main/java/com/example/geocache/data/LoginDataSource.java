@@ -1,5 +1,7 @@
 package com.example.geocache.data;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
 import android.util.Log;
 
 import com.example.geocache.data.model.LoggedInUser;
@@ -12,14 +14,44 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class LoginDataSource {
 
+
+    private OkHttpClient okHttpClient;
+
     public Result<LoggedInUser> login(String username, String password) {
 
         try {
+            new Thread(){
+                @Override
+                public void run(){
+                    FormBody formBody = new FormBody.Builder()
+                            .add("username", username).add("password", password).build();
+                    Request request = new Request.Builder().url("http://192.108.1.9/")
+                            .post(formBody).build();
+                    Call call = okHttpClient.newCall(request);
+                    try {
+                        Response response = call.execute();
+//                        if(response.body().string())
+                        Log.i(TAG,"postLoginSync: "+response.body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+            LoggedInUser user =
+                    new LoggedInUser(
+                            username,username);
+            return new Result.Success<>(user);
             // TODO: handle loggedInUser authentication
 //            private void checkAuthenticity() {
 //                try {
@@ -61,15 +93,16 @@ public class LoginDataSource {
 //                    e.printStackTrace();
 //                }
 //            }
-            LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            java.util.UUID.randomUUID().toString(),
-                            "Jane Doe");
-            return new Result.Success<>(fakeUser);
+
+
+
+
+
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
         }
     }
+
 
     public void logout() {
         // TODO: revoke authentication
