@@ -1,16 +1,7 @@
 package com.example.geocache.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -22,9 +13,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.geocache.R;
-import com.example.geocache.ui.login.LoginViewModel;
-import com.example.geocache.ui.login.LoginViewModelFactory;
 import com.example.geocache.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -75,8 +70,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
+
                 }
                 setResult(Activity.RESULT_OK);
+                //Jump to create and get geocache activity.
+
 
                 //Complete and destroy login activity once successful
                 finish();

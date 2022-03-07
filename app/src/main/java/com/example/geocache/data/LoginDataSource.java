@@ -4,20 +4,21 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.geocache.data.model.LoggedInUser;
 
-import java.io.BufferedReader;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -27,6 +28,8 @@ public class LoginDataSource {
 
 
     private OkHttpClient okHttpClient;
+    private String responseString;
+    private Integer status;
 
     public Result<LoggedInUser> login(String username, String password) {
 
@@ -36,22 +39,45 @@ public class LoginDataSource {
                 public void run(){
                     FormBody formBody = new FormBody.Builder()
                             .add("username", username).add("password", password).build();
-                    Request request = new Request.Builder().url("http://192.108.1.9/")
-                            .post(formBody).build();
+                    RequestBody requestBody = RequestBody.create("{"+"\"username\":\""+username+"\",\"password\":\""+password+"\"}", MediaType.parse("application/json"));
+                    Request request = new Request.Builder().url("http://10.0.2.2:8080/login")
+                            .post(requestBody).build();
+                    okHttpClient = new OkHttpClient();
                     Call call = okHttpClient.newCall(request);
-                    try {
-                        Response response = call.execute();
-//                        if(response.body().string())
-                        Log.i(TAG,"postLoginSync: "+response.body().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        Response response = call.execute();
+////                        if(response.body().string())
+//                        Log.i(TAG,"postLoginSync: "+response.body().string());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            Log.i(TAG,"Login failed.");
+                        }
+
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            responseString = response.body().string();
+                            Log.i(TAG,"postLoginAsync: "+responseString );
+
+                        }
+                    });
                 }
             }.start();
-            LoggedInUser user =
-                    new LoggedInUser(
-                            username,username);
-            return new Result.Success<>(user);
+
+            JSONObject jsonObject = new JSONObject(responseString);
+            status = jsonObject.getInt("kstatus");
+            if(status==1){
+                LoggedInUser user =
+                        new LoggedInUser(username,username);
+                Log.i(TAG,"Successfully logged in.");
+                return new Result.Success<>(user);
+            }
+            else return new Result.Error(new Exception("Wrong username password pairs."));
+
+
             // TODO: handle loggedInUser authentication
 //            private void checkAuthenticity() {
 //                try {
@@ -99,7 +125,7 @@ public class LoginDataSource {
 
 
         } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
+            return new Result.Error(new IOException("Error logging in, possibly network issue.", e));
         }
     }
 

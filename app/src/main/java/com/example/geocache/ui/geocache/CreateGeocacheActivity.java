@@ -1,4 +1,15 @@
 package com.example.geocache.ui.geocache;
 
-public class CreateGeocacheActivity {
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class CreateGeocacheActivity extends AppCompatActivity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+
+
+    }
+
 }
