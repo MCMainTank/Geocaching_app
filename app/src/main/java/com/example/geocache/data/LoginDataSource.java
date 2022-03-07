@@ -1,6 +1,7 @@
 package com.example.geocache.data;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+import static java.lang.Thread.sleep;
 
 import android.util.Log;
 
@@ -27,6 +28,7 @@ import okhttp3.Response;
 public class LoginDataSource {
 
 
+    private static final Object PREFS_NAME = "Login Status";
     private OkHttpClient okHttpClient;
     private String responseString;
     private Integer status;
@@ -66,13 +68,14 @@ public class LoginDataSource {
                     });
                 }
             }.start();
-
+            sleep(3000);
             JSONObject jsonObject = new JSONObject(responseString);
             status = jsonObject.getInt("kstatus");
             if(status==1){
                 LoggedInUser user =
                         new LoggedInUser(username,username);
                 Log.i(TAG,"Successfully logged in.");
+//                saveLoginStates();
                 return new Result.Success<>(user);
             }
             else return new Result.Error(new Exception("Wrong username password pairs."));
@@ -133,4 +136,12 @@ public class LoginDataSource {
     public void logout() {
         // TODO: revoke authentication
     }
+
+//    private void saveLoginStates(){
+//        SharedPreferences userInfo = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+//        SharedPreferences.Editor editor = userInfo.edit();
+//        editor.commit();
+//        editor.putInt("status", 1);
+//    }
+
 }

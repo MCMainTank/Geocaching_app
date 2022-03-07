@@ -1,9 +1,14 @@
 package com.example.geocache.ui.login;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,6 +29,7 @@ import com.example.geocache.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String PREFS_NAME = "LoginStatus";
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 
@@ -67,15 +73,19 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.GONE);
                 if (loginResult.getError() != null) {
                     showLoginFailed(loginResult.getError());
+                    Log.e(TAG, "Failed...");
                 }
                 if (loginResult.getSuccess() != null) {
+                    //Jump to create and get geocache activity.
+                    Log.e(TAG, "Success!");
+                    SharedPreferences userInfo = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = userInfo.edit();
+                    editor.commit();
+                    editor.putInt("status", 1);
                     updateUiWithUser(loginResult.getSuccess());
-
+                    startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
                 }
                 setResult(Activity.RESULT_OK);
-                //Jump to create and get geocache activity.
-
-
                 //Complete and destroy login activity once successful
                 finish();
             }
@@ -122,6 +132,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
+    }
+
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
@@ -131,4 +147,6 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
+
+
 }
