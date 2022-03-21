@@ -1,4 +1,6 @@
 package com.example.geocache.ui.admin;
 
-public class ManageGeocacheActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ManageGeocacheActivity extends AppCompatActivity {
 }

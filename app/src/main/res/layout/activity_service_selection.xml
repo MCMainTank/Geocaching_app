@@ -11,24 +11,28 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="105dp"
+        android:layout_marginTop="237dp"
         android:layout_marginEnd="106dp"
         android:text="Find geocache by ID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="238dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button_selection_to_create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="218dp"
+        android:layout_height="48dp"
         android:layout_marginStart="96dp"
+        android:layout_marginTop="45dp"
         android:layout_marginEnd="97dp"
+        android:layout_marginBottom="48dp"
         android:text="Create new geocache"
+        app:layout_constraintBottom_toTopOf="@+id/button_selection_to_history"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="331dp" />
+        app:layout_constraintTop_toBottomOf="@+id/button_selection_to_find_geocache"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button_selection_to_history"

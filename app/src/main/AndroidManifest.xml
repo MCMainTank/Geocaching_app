@@ -21,6 +21,22 @@
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".ui.login.ServiceSelectionActivity"
+            android:exported="false"
+            android:label="@string/title_activity_service_selection" />
+        <activity
+            android:name=".ui.geocache.ViewHistoryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_history_view" />
+        <activity
+            android:name=".ui.geocache.CreateGeocacheActivity"
+            android:exported="false"
+            android:label="@string/title_activity_create_geocache" />
+        <activity
+            android:name=".ui.geocache.GetGeocacheActivity"
+            android:exported="false"
+            android:label="@string/title_activity_get_geocache" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>

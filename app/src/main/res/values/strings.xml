@@ -6,6 +6,10 @@
     <string name="down_arrow">\u2193</string>
     <string name="right_arrow">\u2192</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_service_selection">ServiceSelectionActivity</string>
+    <string name="title_activity_history_view">ViewHistoryActivity</string>
+    <string name="title_activity_get_geocache">GetGeocacheActivity</string>
+    <string name="title_activity_create_geocache">CreateGeocacheActivity</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_geocache_id">Please enter geocache id here</string>
