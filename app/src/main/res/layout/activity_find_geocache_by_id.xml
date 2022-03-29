@@ -25,6 +25,7 @@
         android:background="@drawable/round_button"
         android:backgroundTint="@drawable/btn_color_selector"
         android:foreground="@drawable/ic_baseline_arrow_forward_24"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.906"

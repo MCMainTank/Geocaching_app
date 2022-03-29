@@ -39,10 +39,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="134dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="135dp"
         android:text="View history"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="426dp" />
+        app:layout_constraintTop_toBottomOf="@+id/button_selection_to_create"
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

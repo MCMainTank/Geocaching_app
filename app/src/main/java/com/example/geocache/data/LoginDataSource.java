@@ -68,7 +68,7 @@ public class LoginDataSource {
                     });
                 }
             }.start();
-            sleep(3000);
+            sleep(1000);
             JSONObject jsonObject = new JSONObject(responseString);
             status = jsonObject.getInt("kstatus");
             if(status==1){
