@@ -8,6 +8,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.geocache.data.model.LoggedInUser;
+import com.example.geocache.data.model.UserInfoShp;
+import com.example.geocache.ui.login.LoginActivity;
 
 import org.json.JSONObject;
 
@@ -32,6 +34,7 @@ public class LoginDataSource {
     private OkHttpClient okHttpClient;
     private String responseString;
     private Integer status;
+    private static UserInfoShp userInfoShp;
 
     public Result<LoggedInUser> login(String username, String password) {
 

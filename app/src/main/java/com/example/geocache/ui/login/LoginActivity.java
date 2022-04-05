@@ -25,6 +25,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.geocache.R;
+import com.example.geocache.data.model.UserInfoShp;
 import com.example.geocache.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "LoginStatus";
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+    private static UserInfoShp userInfoShp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
+
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -80,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG, "Success!");
                     SharedPreferences userInfo = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = userInfo.edit();
+                    userInfoShp.setUserName(LoginActivity.this,usernameEditText.getText().toString());
                     editor.commit();
                     editor.putInt("status", 1);
                     updateUiWithUser(loginResult.getSuccess());
