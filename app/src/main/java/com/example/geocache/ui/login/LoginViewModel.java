@@ -16,6 +16,8 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+    private Integer success=0;
+    private Integer loggedInUserGroup = 0;
 
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
@@ -35,8 +37,15 @@ public class LoginViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            this.success = 1;
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        }else if(result instanceof Result.SuccessAsAdmin){
+            loggedInUserGroup = 1;
+            this.success = 1;
+            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
+            this.success=0;
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
     }
@@ -61,6 +70,14 @@ public class LoginViewModel extends ViewModel {
         } else {
             return !username.trim().isEmpty();
         }
+    }
+
+    public Integer getSuccess(){
+        return this.success;
+    }
+
+    public Integer getLoggedInUserGroup(){
+        return this.loggedInUserGroup;
     }
 
     // A placeholder password validation check

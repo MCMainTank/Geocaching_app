@@ -5,14 +5,14 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/editTextTextID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName|numberDecimal"
-        android:text="39.837275000000000"
+        android:text="116.341846000000000"
         tools:layout_editor_absoluteX="143dp"
-        tools:layout_editor_absoluteY="187dp" />
+        tools:layout_editor_absoluteY="190dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -20,25 +20,17 @@
         android:layout_height="wrap_content"
         android:text="Latitudes:"
         tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="146dp" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Longitudes:"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="200dp" />
+        tools:layout_editor_absoluteY="262dp" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editTextLongitudes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName|numberDecimal"
-        android:text="116.341846000000000"
+        android:text="39.837275000000000"
         tools:layout_editor_absoluteX="143dp"
-        tools:layout_editor_absoluteY="133dp" />
+        tools:layout_editor_absoluteY="302dp" />
 
     <TextView
         android:id="@+id/textView6"
@@ -46,15 +38,42 @@
         android:layout_height="wrap_content"
         android:text="Description:"
         tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="257dp" />
+        tools:layout_editor_absoluteY="373dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Geocache ID:"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="203dp" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/editTextLatitudes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName|numberDecimal"
+        android:text="116.341846000000000"
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="249dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Longitudes:"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="316dp" />
+
+    <EditText
+        android:id="@+id/editTextTextDescription"
         android:layout_width="215dp"
         android:layout_height="54dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Under the second tree east to the crossroad"
         tools:layout_editor_absoluteX="143dp"
-        tools:layout_editor_absoluteY="247dp" />
+        tools:layout_editor_absoluteY="363dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

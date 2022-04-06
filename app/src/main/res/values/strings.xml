@@ -10,6 +10,8 @@
     <string name="title_activity_history_view">ViewHistoryActivity</string>
     <string name="title_activity_get_geocache">GetGeocacheActivity</string>
     <string name="title_activity_create_geocache">CreateGeocacheActivity</string>
+    <string name="title_activity_view_geocache">ViewGeocacheActivity</string>
+    <string name="title_activity_admin_service_selection">AdminServiceSelectionActivity</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_geocache_id">Please enter geocache id here</string>

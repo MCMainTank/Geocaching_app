@@ -33,6 +33,18 @@ public class Result<T> {
         }
     }
 
+    public final static class SuccessAsAdmin<T> extends Result {
+        private T data;
+
+        public SuccessAsAdmin(T data) {
+            this.data = data;
+        }
+
+        public T getData() {
+            return this.data;
+        }
+    }
+
     // Error sub-class
     public final static class Error extends Result {
         private Exception error;

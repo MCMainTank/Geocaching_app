@@ -1,5 +1,7 @@
 package com.example.geocache.ui.geocache;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,11 +11,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -21,14 +25,20 @@ import com.example.geocache.R;
 import com.example.geocache.data.model.Geocache;
 import com.example.geocache.data.model.UserInfoShp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CreateGeocacheActivity extends AppCompatActivity {
 
@@ -39,6 +49,7 @@ public class CreateGeocacheActivity extends AppCompatActivity {
     private String locationProvider;
     private static UserInfoShp userInfoShp;
     private Geocache geocache;
+    private Integer status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,17 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                if (ActivityCompat.checkSelfPermission(CreateGeocacheActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateGeocacheActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    Toast.makeText(CreateGeocacheActivity.this, "Sorry, we don't have access to your location.", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                                 List<String> providers = locationManager.getProviders(true);
                                 if (providers.contains(LocationManager.GPS_PROVIDER)) {
@@ -66,16 +88,7 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                                     Toast.makeText(CreateGeocacheActivity.this, "No available location provider, there might be no GPS signal in your location", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                if (ActivityCompat.checkSelfPermission(CreateGeocacheActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateGeocacheActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
-                                    return;
-                                }
+
                                 Location location = locationManager.getLastKnownLocation(locationProvider);
                                 String geocacheDescription = editText.getText().toString();
                                 String username = userInfoShp.getUserName(CreateGeocacheActivity.this);
@@ -88,10 +101,32 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                                         okHttpClient = new OkHttpClient();
                                         Call call = okHttpClient.newCall(request);
                                         //TODO:Enqueue the call and get results
+                                call.enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                        Log.i(TAG,"Failed to communicate with server.");
+                                    }
 
-
+                                    @Override
+                                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                        responseString = response.body().string();
+                                    }
+                                });
                                     }
                                 }.start();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(responseString);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                if(status==1){
+                                    String success = "You have successfully created a geocache!";
+                                    Toast.makeText(getApplicationContext(),success, Toast.LENGTH_LONG).show();
+
+                                }else{
+                                    String failed = "Something went wrong, you may want to check your description.";
+                                    Toast.makeText(getApplicationContext(),failed, Toast.LENGTH_LONG).show();
+                                }
                             }
                         })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

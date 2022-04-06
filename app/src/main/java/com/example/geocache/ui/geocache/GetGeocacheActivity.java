@@ -2,6 +2,7 @@ package com.example.geocache.ui.geocache;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.geocache.R;
+import com.example.geocache.data.model.Geocache;
+import com.example.geocache.ui.login.LoginActivity;
+import com.example.geocache.ui.login.ServiceSelectionActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -29,6 +36,8 @@ public class GetGeocacheActivity extends AppCompatActivity {
     private EditText editText;
     private OkHttpClient okHttpClient;
     private String responseString;
+    private Geocache geocache;
+    private JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +50,6 @@ public class GetGeocacheActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String geocacheId = editText.getText().toString();
 
-                new Thread(){
-                    @Override
-                    public void run(){
-                        FormBody formBody = new FormBody.Builder()
-                                .add("geocacheId", geocacheId).build();
                         RequestBody requestBody = RequestBody.create("{"+"\"geocacheId\":\""+geocacheId+"\"}", MediaType.parse("application/json"));
                         Request request = new Request.Builder().url("http://10.0.2.2:8080/getGeocache")
                                 .post(requestBody).build();
@@ -55,20 +59,40 @@ public class GetGeocacheActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                 Log.i(TAG,"Failed to communicate with server.");
+                                return;
                             }
 
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                                 responseString = response.body().string();
                                 Log.i(TAG,"Requested geocache: "+responseString );
+                                Log.i(TAG,"Requested geocache: "+responseString );
+                                    try {
+                                        jsonObject = new JSONObject(responseString);
+                                        geocache.setGeocacheId(jsonObject.getInt("geocacheId"));
+                                        geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
+                                        geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
+                                        geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
                             }
                         });
-
-                    }
-                }.start();
+                Intent intent = new Intent(GetGeocacheActivity.this,ViewGeocacheActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("geocacheId",geocache.getGeocacheId());
+                bundle.putString("geocacheLocationDescription",geocache.getDescription());
+                bundle.putDouble("geocacheLatitudes",geocache.getLatitudes());
+                bundle.putDouble("geocacheLongitudes",geocache.getLongitudes());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
-
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        startActivity(new Intent(GetGeocacheActivity.this, ServiceSelectionActivity.class));
+    }
 }

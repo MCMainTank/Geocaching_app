@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                     Log.e(TAG, "Failed...");
                 }
-                if (loginResult.getSuccess() != null) {
+                if (loginResult.getSuccess() != null&&loginViewModel.getSuccess()==1) {
                     //Jump to create and get geocache activity.
                     Log.e(TAG, "Success!");
                     SharedPreferences userInfo = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -87,7 +87,14 @@ public class LoginActivity extends AppCompatActivity {
                     editor.commit();
                     editor.putInt("status", 1);
                     updateUiWithUser(loginResult.getSuccess());
-                    startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
+                    if(loginViewModel.getLoggedInUserGroup()==0){
+                        startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
+                    }
+                    else if(loginViewModel.getLoggedInUserGroup()==1){
+                        startActivity(new Intent(LoginActivity.this,AdminServiceSelectionActivity.class));
+                    }
+                }else{
+                    return;
                 }
                 setResult(Activity.RESULT_OK);
                 //Complete and destroy login activity once successful
@@ -139,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
+//        startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

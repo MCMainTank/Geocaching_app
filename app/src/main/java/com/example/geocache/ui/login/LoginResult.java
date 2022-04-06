@@ -7,9 +7,11 @@ import androidx.annotation.Nullable;
  */
 class LoginResult {
     @Nullable
-    private LoggedInUserView success;
+    private LoggedInUserView success=null;
     @Nullable
     private Integer error;
+
+    private Integer loggedInUserGroup;
 
     LoginResult(@Nullable Integer error) {
         this.error = error;

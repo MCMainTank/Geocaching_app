@@ -1,8 +1,11 @@
 package com.example.geocache.data;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 import static java.lang.Thread.sleep;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -71,7 +74,7 @@ public class LoginDataSource {
                     });
                 }
             }.start();
-            sleep(1000);
+            sleep(700);
             JSONObject jsonObject = new JSONObject(responseString);
             status = jsonObject.getInt("kstatus");
             if(status==1){
@@ -80,6 +83,11 @@ public class LoginDataSource {
                 Log.i(TAG,"Successfully logged in.");
 //                saveLoginStates();
                 return new Result.Success<>(user);
+            }else if(status == 2){
+                LoggedInUser user =
+                        new LoggedInUser(username,username);
+                Log.i(TAG,"Successfully logged in as admin.");
+                return new Result.SuccessAsAdmin<>(user);
             }
             else return new Result.Error(new Exception("Wrong username password pairs."));
 
