@@ -42,7 +42,7 @@ public class LoginViewModel extends ViewModel {
         }else if(result instanceof Result.SuccessAsAdmin){
             loggedInUserGroup = 1;
             this.success = 1;
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            LoggedInUser data = ((Result.SuccessAsAdmin<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
             this.success=0;

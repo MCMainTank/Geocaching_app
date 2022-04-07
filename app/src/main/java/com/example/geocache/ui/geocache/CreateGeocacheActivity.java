@@ -2,15 +2,20 @@ package com.example.geocache.ui.geocache;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Thread.sleep;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +38,6 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,8 +52,29 @@ public class CreateGeocacheActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private String locationProvider;
     private static UserInfoShp userInfoShp;
-    private Geocache geocache;
-    private Integer status;
+    private Geocache geocache = new Geocache();
+    private Integer generatedKey = new Integer(0);
+    private Double latitudes;
+    private Double longitudes;
+    private JSONObject jsonObject;
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            Log.d(TAG, "Location changed to: " + getLocationInfo(location));
+        }
+        public void onProviderDisabled(String provider) {
+            Log.d(TAG, provider + " disabled.");
+        }
+
+        public void onProviderEnabled(String provider) {
+            Log.d(TAG, provider + " enabled.");
+        }
+
+        public void onStatusChanged(String provider, int status,
+                                    Bundle extras){
+            Log.d(TAG, provider + " status changed.");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +103,8 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                                 }
                                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                                 List<String> providers = locationManager.getProviders(true);
+                                if(providers==null)
+                                    return;
                                 if (providers.contains(LocationManager.GPS_PROVIDER)) {
                                     //If the provider is GPS
                                     locationProvider = LocationManager.GPS_PROVIDER;
@@ -88,45 +115,117 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                                     Toast.makeText(CreateGeocacheActivity.this, "No available location provider, there might be no GPS signal in your location", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-
+                                Log.i(TAG,"Your provider is:"+locationProvider.toString());
+                                try {
+                                    sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 Location location = locationManager.getLastKnownLocation(locationProvider);
+                                locationManager.requestLocationUpdates(locationProvider,100,5,locationListener);
+                                try {
+                                    sleep(350);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                if(isGpsAble(locationManager)){
+                                    Log.i(TAG,"GPS is available");
+                                }
                                 String geocacheDescription = editText.getText().toString();
                                 String username = userInfoShp.getUserName(CreateGeocacheActivity.this);
-                                new Thread() {
+                                String creating = "Creating new geocache...";
+                                Toast.makeText(getApplicationContext(),creating, Toast.LENGTH_LONG).show();
+//                                new Thread() {
+//                                    @Override
+//                                    public void run() {
+                                if(location!=null){
+                                    Log.i(TAG,"good");
+                                }else{
+                                    return;
+                                }
+                                Log.i(TAG,location.toString());
+                                latitudes = location.getLatitude();
+                                longitudes = location.getLongitude();
+                                Log.i(TAG,latitudes.toString()+longitudes.toString());
+                                geocache.setLongitudes(longitudes);
+                                geocache.setLatitudes(latitudes);
+                                geocache.setDescription(geocacheDescription);
+                                new Thread(){
                                     @Override
-                                    public void run() {
-                                        RequestBody requestBody = RequestBody.create("{"+"\"username\":\""+username+"\",\"Latitudes\":\""+location.getLatitude()+"\"Longitudes\":\""+location.getLongitude()+"\",\"Description\":\""+geocacheDescription+"\"}", MediaType.parse("application/json"));
+                                    public void run(){
+
+                                        RequestBody requestBody = RequestBody.create("{"+"\"username\":\""+username+"\",\"Latitudes\":\""+latitudes.toString()+"\",\"Longitudes\":\""+longitudes.toString()+"\",\"Description\":\""+geocacheDescription+"\"}", MediaType.parse("application/json"));
                                         Request request = new Request.Builder().url("http://10.0.2.2:8080/createGeocache")
                                                 .post(requestBody).build();
                                         okHttpClient = new OkHttpClient();
                                         Call call = okHttpClient.newCall(request);
-                                        //TODO:Enqueue the call and get results
-                                call.enqueue(new Callback() {
-                                    @Override
-                                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                        Log.i(TAG,"Failed to communicate with server.");
-                                    }
+                                        Response response = null;
+                                        try {
+                                            response= call.execute();
+                                            responseString = response.body().string();
+                                            jsonObject = new JSONObject(responseString);
+                                            setGeneratedKey(parseInt(jsonObject.getString("generatedKey")));
+                                            generatedKey = getGeneratedKey();
+                                            geocache.setGeocacheId(getGeneratedKey());
+                                            Log.i(TAG,generatedKey.toString());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+//                                        Log.i(TAG,"Beacon"+responseString);
+//                                        String success = "You have successfully connected to the server, jumping...";
+//                                        Toast.makeText(getApplicationContext(),success, Toast.LENGTH_LONG).show();
+//                                        if(generatedKey!=0){
+//                                            Looper.prepare();
+//                                            String success_1 = "You have successfully created a geocache!";
+//                                            Toast.makeText(getApplicationContext(),success_1, Toast.LENGTH_LONG).show();
+//                                            Looper.loop();
+//                                        }else{
+//                                            Looper.prepare();
+//                                            String failed = "Something went wrong, you may want to check your description.";
+//                                            Toast.makeText(getApplicationContext(),failed, Toast.LENGTH_LONG).show();
+//                                            Looper.loop();
+//
+//                                        }
+                                        generatedKey = getGeneratedKey();
+                                        Log.i(TAG,generatedKey.toString());
+                                        if(getGeneratedKey()!=0){
+//                                            String success_1 = "You have successfully created a geocache!";
+//                                            Toast.makeText(getApplicationContext(),success_1, Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(CreateGeocacheActivity.this,ViewGeocacheActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putInt("geocacheId",getGeneratedKey());
+                                            bundle.putString("geocacheLocationDescription",geocache.getDescription());
+                                            bundle.putDouble("geocacheLatitudes",geocache.getLatitudes());
+                                            bundle.putDouble("geocacheLongitudes",geocache.getLongitudes());
+                                            intent.putExtras(bundle);
 
-                                    @Override
-                                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                        responseString = response.body().string();
-                                    }
-                                });
+                                            startActivity(intent);
+                                        }else{
+//                                            String failed = "Something went wrong, you may want to check your description.";
+//                                            Toast.makeText(getApplicationContext(),failed, Toast.LENGTH_LONG).show();
+                                            return;
+                                        }
+
                                     }
                                 }.start();
-                                try {
-                                    JSONObject jsonObject = new JSONObject(responseString);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                if(status==1){
-                                    String success = "You have successfully created a geocache!";
-                                    Toast.makeText(getApplicationContext(),success, Toast.LENGTH_LONG).show();
 
-                                }else{
-                                    String failed = "Something went wrong, you may want to check your description.";
-                                    Toast.makeText(getApplicationContext(),failed, Toast.LENGTH_LONG).show();
-                                }
+
+//                                //TODO:Enqueue the call and get results
+//                                call.enqueue(new Callback() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                                        Log.i(TAG,"Failed to communicate with server.");
+//                                    }
+//
+//                                    @Override
+//                                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+//                                    }
+//                                });
+//                                    }
+//                                }.start();
+
+
                             }
                         })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -138,6 +237,36 @@ public class CreateGeocacheActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private boolean isGpsAble(LocationManager lm) {
+        return lm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) ? true : false;
+    }
+
+
+    private String getLocationInfo(Location location) {
+        String info = "";
+        info += "Longitude:" + location.getLongitude();
+        info += ", Latitude:" + location.getLatitude();
+        if (location.hasAltitude()) {
+            info += ", Altitude:" + location.getAltitude();
+        }
+        if (location.hasBearing()) {
+            info += ", Bearing:" + location.getBearing();
+        }
+        return info;
+    }
+
+    private void setGeneratedKey(Integer generatedKey){
+        this.generatedKey = generatedKey;
+    }
+
+    private int getGeneratedKey(){
+        return this.generatedKey;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
 }

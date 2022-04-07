@@ -24,11 +24,20 @@
         <entry key="..\:/Geocache/app/src/main/res/layout/activity_submit_new_geocache.xml" value="0.45446772124839674" />
         <entry key="..\:/Geocache/app/src/main/res/layout/activity_view_history.xml" value="0.35784523300555793" />
         <entry key="..\:/Geocache/app/src/main/res/layout/log_in.xml" value="0.5027173913043478" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/drawable/history_child_layout.xml" value="0.133" />
         <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_admin_geocache_management.xml" value="0.1879432624113475" />
         <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_admin_service_selection.xml" value="0.2074074074074074" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_create_geocache.xml" value="0.22492401215805471" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_find_geocache_by_id.xml" value="0.2692502532928065" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_history.xml" value="0.15" />
         <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_login.xml" value="0.1879432624113475" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_service_selection.xml" value="0.2692502532928065" />
         <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_show_find_geocache_result.xml" value="0.5" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_submit_new_geocache.xml" value="0.22492401215805471" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_view_geocache.xml" value="0.5" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/activity_view_history.xml" value="0.2296195652173913" />
+        <entry key="..\:/Users/qiyel/StudioProjects/Geocaching_app/app/src/main/res/layout/history_child_layout.xml" value="0.33" />
       </map>
     </option>
   </component>

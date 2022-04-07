@@ -26,7 +26,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
         Integer id = intent.getIntExtra("geocacheId",0);
         Double latitudes = intent.getDoubleExtra("geocacheLatitudes",404);
         Double longitudes = intent.getDoubleExtra("geocacheLongitudes",404);
-        editTextTextID.setText(id);
+        editTextTextID.setText(id.toString());
         editTextLatitudes.setText(latitudes.toString());
         editTextLongitudes.setText(longitudes.toString());
         editTextTextDescription.setText(description);

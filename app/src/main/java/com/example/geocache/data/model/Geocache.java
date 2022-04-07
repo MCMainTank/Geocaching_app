@@ -1,12 +1,25 @@
 package com.example.geocache.data.model;
 
+import java.util.Date;
+
 public class Geocache {
     private Integer geocacheId;
     private Double latitudes;
     private Double longitudes;
     private String description;
+    private Date geocacheDateOfUpload;
     private Integer pid;
     private boolean deleted;
+    private Integer reported;
+
+//    public Geocache(int geocacheId, int pid, double geocacheLatitudes, double geocacheLongitudes, String geocacheLocationDescription, boolean deleted) {
+//        this.geocacheId = geocacheId;
+//        this.pid = pid;
+//        this.latitudes = latitudes;
+//        this.longitudes = longitudes;
+//        this.description = description;
+//        this.deleted = deleted;
+//    }
 
     public void setGeocacheId(Integer geocacheId){
         this.geocacheId = geocacheId;
@@ -32,6 +45,8 @@ public class Geocache {
         this.deleted = deleted;
     }
 
+    public void setGeocacheDateOfUpload(Date geocacheDateOfUpload){this.geocacheDateOfUpload = geocacheDateOfUpload;}
+
     public String getDescription(){
         return this.description;
     }
@@ -51,4 +66,7 @@ public class Geocache {
     public Integer getPid(){
         return this.pid;
     }
+
+    public Date getGeocacheDateOfUpload(){return this.geocacheDateOfUpload; }
+
 }

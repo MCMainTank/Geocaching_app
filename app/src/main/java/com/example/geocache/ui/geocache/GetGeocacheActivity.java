@@ -2,6 +2,9 @@ package com.example.geocache.ui.geocache;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Thread.sleep;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,7 +39,7 @@ public class GetGeocacheActivity extends AppCompatActivity {
     private EditText editText;
     private OkHttpClient okHttpClient;
     private String responseString;
-    private Geocache geocache;
+    private Geocache geocache = new Geocache();
     private JSONObject jsonObject;
 
     @Override
@@ -49,38 +52,61 @@ public class GetGeocacheActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String geocacheId = editText.getText().toString();
-
+                new Thread(){
+                    @Override
+                    public void run(){
                         RequestBody requestBody = RequestBody.create("{"+"\"geocacheId\":\""+geocacheId+"\"}", MediaType.parse("application/json"));
                         Request request = new Request.Builder().url("http://10.0.2.2:8080/getGeocache")
                                 .post(requestBody).build();
                         okHttpClient = new OkHttpClient();
                         Call call = okHttpClient.newCall(request);
-                        call.enqueue(new Callback() {
-                            @Override
-                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                Log.i(TAG,"Failed to communicate with server.");
-                                return;
+                        Response response = null;
+                        try {
+                            response = call.execute();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+//                        call.enqueue(new Callback() {
+//                            @Override
+//                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                                Log.i(TAG,"Failed to communicate with server.");
+//                                return;
+//                            }
+//
+//                            @Override
+//                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        try {
+                            responseString = response.body().string();
+                            Log.i(TAG,"Requested geocache: "+responseString );
+                            jsonObject = new JSONObject(responseString);
+                            Log.i(TAG,jsonObject.toString());
+                            if(geocache!=null){
+                                Log.i(TAG,"Fine");
                             }
+                            geocache.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
+                            geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
+                            geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
+                            geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                            @Override
-                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                responseString = response.body().string();
-                                Log.i(TAG,"Requested geocache: "+responseString );
-                                Log.i(TAG,"Requested geocache: "+responseString );
-                                    try {
-                                        jsonObject = new JSONObject(responseString);
-                                        geocache.setGeocacheId(jsonObject.getInt("geocacheId"));
-                                        geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
-                                        geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
-                                        geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                    }
+                }.start();
 
-                            }
-                        });
+
+//                            }
+//                        });
+                try {
+                    sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent(GetGeocacheActivity.this,ViewGeocacheActivity.class);
                 Bundle bundle = new Bundle();
+                if(geocache!=null){
+                    Log.i(TAG,"Fine");
+                }
                 bundle.putInt("geocacheId",geocache.getGeocacheId());
                 bundle.putString("geocacheLocationDescription",geocache.getDescription());
                 bundle.putDouble("geocacheLatitudes",geocache.getLatitudes());
