@@ -2,6 +2,8 @@ package com.example.geocache.ui.login;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+import static java.lang.Thread.sleep;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +31,28 @@ import com.example.geocache.R;
 import com.example.geocache.data.model.UserInfoShp;
 import com.example.geocache.databinding.ActivityLoginBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "LoginStatus";
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
     private static UserInfoShp userInfoShp;
+    private OkHttpClient okHttpClient;
+    private String responseString;
+    private Integer status;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +67,9 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
+        final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
+
 
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -58,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
+                registerButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }
@@ -84,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences userInfo = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = userInfo.edit();
                     userInfoShp.setUserName(LoginActivity.this,usernameEditText.getText().toString());
+                    userInfoShp.setUserPassword(LoginActivity.this, passwordEditText.getText().toString());
                     editor.commit();
                     editor.putInt("status", 1);
                     updateUiWithUser(loginResult.getSuccess());
@@ -141,6 +164,70 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());
             }
         });
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        RequestBody requestBody = RequestBody.create("{" + "\"username\":\"" + usernameEditText.getText().toString() + "\",\"password\":\"" + passwordEditText.getText().toString() + "\"}", MediaType.parse("application/json"));
+                        Request request = new Request.Builder().url("http://10.0.2.2:8080/register")
+                                .post(requestBody).build();
+                        okHttpClient = new OkHttpClient();
+                        Call call = okHttpClient.newCall(request);
+                        call.enqueue(new Callback() {
+                            @Override
+                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                Log.i(TAG, "Login failed.");
+                            }
+
+                            @Override
+                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                responseString = response.body().string();
+                                Log.i(TAG, "postLoginAsync: " + responseString);
+                            }
+                        });
+//                        Response response = null;
+//                        try {
+//                            response = call.execute();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        try {
+//                            responseString = response.body().string();
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+
+                    }
+                }.start();
+                try {
+                    sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    JSONObject jsonObject = new JSONObject(responseString);
+                    status = jsonObject.getInt("kstatus");
+                    if (status == 1) {
+                        SharedPreferences userInfo = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = userInfo.edit();
+                        userInfoShp.setUserName(LoginActivity.this, usernameEditText.getText().toString());
+                        userInfoShp.setUserPassword(LoginActivity.this, passwordEditText.getText().toString());
+                        editor.putInt("status", 1);
+                        editor.commit();
+                        startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Register failed, user name taken.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            });
+
     }
 
     @Override

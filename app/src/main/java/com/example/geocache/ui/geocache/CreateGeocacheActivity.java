@@ -198,7 +198,6 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                                             bundle.putDouble("geocacheLatitudes",geocache.getLatitudes());
                                             bundle.putDouble("geocacheLongitudes",geocache.getLongitudes());
                                             intent.putExtras(bundle);
-
                                             startActivity(intent);
                                         }else{
 //                                            String failed = "Something went wrong, you may want to check your description.";
@@ -231,7 +230,7 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        return;
                     }
                 }).show();
 

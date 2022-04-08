@@ -10,6 +10,19 @@ public class Geocache {
     private Date geocacheDateOfUpload;
     private Integer pid;
     private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public Integer getReported() {
+        return reported;
+    }
+
+    public void setReported(Integer reported) {
+        this.reported = reported;
+    }
+
     private Integer reported;
 
 //    public Geocache(int geocacheId, int pid, double geocacheLatitudes, double geocacheLongitudes, String geocacheLocationDescription, boolean deleted) {

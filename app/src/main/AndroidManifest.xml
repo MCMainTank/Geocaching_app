@@ -35,6 +35,14 @@
             android:exported="false"
             android:label="@string/title_activity_admin_service_selection" />
         <activity
+            android:name=".ui.admin.ManageGeocacheActivity"
+            android:exported="false"
+            android:label="@string/title_activity_geocache_management" />
+        <activity
+            android:name=".ui.admin.ManageUserActivity"
+            android:exported="false"
+            android:label="@string/title_activity_user_management" />
+        <activity
             android:name=".ui.geocache.ViewHistoryActivity"
             android:exported="false"
             android:label="@string/title_activity_history_view" />
