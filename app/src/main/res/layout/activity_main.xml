@@ -19,20 +19,17 @@
 
     <Button
         android:id="@+id/button_1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="107dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="148dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@drawable/round_button"
         android:backgroundTint="@drawable/btn_color_selector"
         android:foreground="@drawable/ic_baseline_arrow_forward_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:ignore="MissingConstraints"
-        />
+        app:layout_constraintVertical_bias="0.369"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
