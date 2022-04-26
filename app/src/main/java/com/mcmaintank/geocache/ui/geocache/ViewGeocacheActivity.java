@@ -31,9 +31,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.amap.api.navi.ParallelRoadListener;
 import com.mcmaintank.geocache.R;
 import com.mcmaintank.geocache.data.model.GeocacheInfoShp;
 import com.mcmaintank.geocache.data.model.UserInfoShp;
+import com.mcmaintank.geocache.view.ArrowView;
 import com.mcmaintank.geocache.view.DirectionView;
 
 import org.json.JSONException;
@@ -62,12 +64,13 @@ public class ViewGeocacheActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor mSensorOrientation;
     private DirectionView directionView = null;
+    private ArrowView arrowView = null;
     private SensorListener sensorListener = new SensorListener();
     private LinearLayout compassLayout;
     private static GeocacheInfoShp geocacheInfoShp;
     private final double EARTH_RADIUS = 6378137.0;
     private TextView distanceView;
-    private Double azimuth;
+    private float azimuth;
     private Double curLat;
     private Double curLon;
     private LocationManager locationManager;
@@ -75,6 +78,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
     private Double tarLat;
     private Double tarLon;
     private Double distance;
+    private float azimuth_old = 0;
     private final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
@@ -127,7 +131,10 @@ public class ViewGeocacheActivity extends AppCompatActivity {
         editTextTextID.setEnabled(false);
         compassLayout = findViewById(R.id.compassLayout);
         directionView = new DirectionView(ViewGeocacheActivity.this);
-        compassLayout.addView(directionView);
+        arrowView = new ArrowView(ViewGeocacheActivity.this);
+//        compassLayout.addView(directionView);
+        compassLayout.addView(arrowView);
+        arrowView.bringToFront();
         editTextTextID.setText(id.toString());
         editTextLatitudes.setText(tarLat.toString());
         editTextLongitudes.setText(tarLon.toString());
@@ -165,7 +172,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
         }
         Log.i(TAG,"Your provider is:"+locationProvider.toString());
         try {
-            sleep(500);
+            sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -179,11 +186,23 @@ public class ViewGeocacheActivity extends AppCompatActivity {
         if(isGpsAble(locationManager)){
             Log.i(TAG,"GPS is available");
         }
+        if(location!=null){
+            Log.i(TAG,"good");
+        }else{
+            return;
+        }
+        Log.i(TAG,location.toString());
         curLat = location.getLatitude();
         curLon = location.getLongitude();
         distance = gps2m(curLat,curLon,tarLat,tarLon);
         distanceView.setText(distance.toString());
         distanceView.append("km away");
+        azimuth = gps2d(curLat,curLon,tarLat,tarLon);
+        arrowView.rotate = azimuth-azimuth_old;
+        arrowView.setRotation(arrowView.rotate);
+        arrowView.postInvalidate();
+        Log.i(TAG,""+azimuth);
+
 
 
 
@@ -333,8 +352,13 @@ public class ViewGeocacheActivity extends AppCompatActivity {
             float degree = sensorEvent.values[0];
             predegree = -degree;
             directionView.rotate = predegree;
-            directionView.postInvalidate();
+            directionView.setRotation(directionView.rotate);
+//            directionView.postInvalidate();
             azimuth = gps2d(curLat,curLon,tarLat,tarLon);
+            arrowView.rotate = azimuth-azimuth_old;
+            arrowView.setRotation(arrowView.rotate);
+//            arrowView.postInvalidate();
+            azimuth_old = azimuth;
         }
 
         @Override
@@ -369,7 +393,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
 
     }
 
-    private double gps2d(double lat_a,double lng_a,double lat_b,double lng_b) {
+    private float gps2d(double lat_a,double lng_a,double lat_b,double lng_b) {
 
         double d = 0;
 
@@ -391,7 +415,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
 
 //d = Math.round(d*10000);
 
-        return d;
+        return (float)d;
     }
 
     private String getLocationInfo(Location location) {
@@ -410,6 +434,8 @@ public class ViewGeocacheActivity extends AppCompatActivity {
     private boolean isGpsAble(LocationManager lm) {
         return lm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) ? true : false;
     }
+
+
 
 
 

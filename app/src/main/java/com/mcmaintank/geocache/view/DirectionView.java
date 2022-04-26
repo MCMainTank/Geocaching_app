@@ -56,7 +56,7 @@ public class DirectionView extends View {
     /**
      * 圆环动画开始时 画弧的偏移量
      * */
-    private int mAnimAngle = -1;
+    private int mAnimAngle = -2;
 
     private Double targetLatitude;
 
@@ -152,8 +152,10 @@ public class DirectionView extends View {
                 canvas.rotate(30, x, y);// 旋转的时候一定要指明中心
             }
         }
-        Log.i(TAG,"Draw successful");
+        canvas.rotate(mAnimAngle);
     }
+
+
 
 
 
