@@ -10,20 +10,15 @@ public class Geocache {
     private Date geocacheDateOfUpload;
     private Integer pid;
     private boolean deleted;
+    private Integer reported;
 
     public boolean isDeleted() {
-        return deleted;
+        return this.deleted;
     }
 
-    public Integer getReported() {
-        return reported;
-    }
 
-    public void setReported(Integer reported) {
-        this.reported = reported;
-    }
 
-    private Integer reported;
+
 
 //    public Geocache(int geocacheId, int pid, double geocacheLatitudes, double geocacheLongitudes, String geocacheLocationDescription, boolean deleted) {
 //        this.geocacheId = geocacheId;
@@ -58,6 +53,10 @@ public class Geocache {
         this.deleted = deleted;
     }
 
+    public void setReported(Integer reported) {
+        this.reported = reported;
+    }
+
     public void setGeocacheDateOfUpload(Date geocacheDateOfUpload){this.geocacheDateOfUpload = geocacheDateOfUpload;}
 
     public String getDescription(){
@@ -74,6 +73,10 @@ public class Geocache {
 
     public Integer getGeocacheId(){
         return this.geocacheId;
+    }
+
+    public Integer getReported() {
+        return this.reported;
     }
 
     public Integer getPid(){

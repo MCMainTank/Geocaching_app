@@ -171,10 +171,17 @@ public class ViewGeocacheActivity extends AppCompatActivity {
             return;
         }
         Log.i(TAG,"Your provider is:"+locationProvider.toString());
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//        try {
+//            sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        while(locationManager.getLastKnownLocation(locationProvider)==null){
+            try {
+                sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         Location location = locationManager.getLastKnownLocation(locationProvider);
         locationManager.requestLocationUpdates(locationProvider,100,5,locationListener);
@@ -351,13 +358,15 @@ public class ViewGeocacheActivity extends AppCompatActivity {
         public void onSensorChanged(SensorEvent sensorEvent) {
             float degree = sensorEvent.values[0];
             predegree = -degree;
-            directionView.rotate = predegree;
-            directionView.setRotation(directionView.rotate);
+//            directionView.rotate = predegree;
+//            directionView.setRotation(directionView.rotate);
 //            directionView.postInvalidate();
             azimuth = gps2d(curLat,curLon,tarLat,tarLon);
-            arrowView.rotate = azimuth-azimuth_old;
+//            arrowView.rotate = azimuth-azimuth_old;
+            arrowView.rotate = azimuth-degree;
             arrowView.setRotation(arrowView.rotate);
-//            arrowView.postInvalidate();
+            Log.i(TAG,""+arrowView.rotate);
+            arrowView.postInvalidate();
             azimuth_old = azimuth;
         }
 

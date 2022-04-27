@@ -19,7 +19,7 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="title_activity_user_management">Manage User</string>
     <string name="title_activity_geocache_management">Manage Geocache</string>
-    <string name="welcome">"Welcome to my geocaching app!"</string>
+    <string name="welcome">"Welcome to my geocaching app! "</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>

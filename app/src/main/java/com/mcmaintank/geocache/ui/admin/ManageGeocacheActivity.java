@@ -60,6 +60,7 @@ public class ManageGeocacheActivity extends AppCompatActivity {
                 geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
                 geocache.setDeleted(jsonObject.getBoolean("deleted"));
                 geocache.setPid(parseInt(jsonObject.getString("pid")));
+                geocache.setReported(parseInt(jsonObject.getString("reported")));
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 geocache.setGeocacheDateOfUpload(sdf.parse(jsonObject.getString("geocacheDateOfUpload")));
                 geocacheList.add(geocache);
@@ -114,10 +115,13 @@ public class ManageGeocacheActivity extends AppCompatActivity {
             TextView tv_date = (TextView) view.findViewById(R.id.textView1);
             TextView tv_reported = (TextView) view.findViewById(R.id.textView2);
             View item = (View) view.findViewById(R.id.history_item);
-            tv_id.setText("Geocache ID: "+geocache.getGeocacheId().toString());
+            Integer geocacheId = geocache.getGeocacheId();
+            Integer geocacheReported = geocache.getReported();
+            tv_id.setText("Geocache ID: "+geocacheId);
+            tv_reported.setText("Report count: "+geocacheReported);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            tv_date.setText(sdf.format("Date of Upload: "+geocache.getGeocacheDateOfUpload()).toString());
-            tv_reported.setText("Report count: "+geocache.getReported().toString());
+            tv_date.setText("Date of Upload: "+sdf.format(geocache.getGeocacheDateOfUpload()));
+
 
             item.setOnClickListener(new View.OnClickListener(){
                 @Override
