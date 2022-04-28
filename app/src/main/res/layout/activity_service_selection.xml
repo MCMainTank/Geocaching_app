@@ -7,6 +7,21 @@
     tools:context=".ui.login.ServiceSelectionActivity">
 
     <Button
+        android:id="@+id/button_selection_to_show_geocache"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="148dp"
+        android:text="Show nearest geocache"
+        app:layout_constraintBottom_toTopOf="@+id/button_selection_to_find_geocache"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
+
+    <Button
         android:id="@+id/button_selection_to_find_geocache"
         android:layout_width="200dp"
         android:layout_height="wrap_content"

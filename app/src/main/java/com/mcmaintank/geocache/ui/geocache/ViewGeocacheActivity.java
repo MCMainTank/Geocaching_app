@@ -77,6 +77,8 @@ public class ViewGeocacheActivity extends AppCompatActivity {
     private String locationProvider;
     private Double tarLat;
     private Double tarLon;
+    private String tarLatString;
+    private String tarLonString;
     private Double distance;
     private float azimuth_old = 0;
     private final LocationListener locationListener = new LocationListener() {
@@ -136,8 +138,18 @@ public class ViewGeocacheActivity extends AppCompatActivity {
         compassLayout.addView(arrowView);
         arrowView.bringToFront();
         editTextTextID.setText(id.toString());
-        editTextLatitudes.setText(tarLat.toString());
-        editTextLongitudes.setText(tarLon.toString());
+        if(tarLat<0){
+            tarLatString="S "+d2dms(tarLat)[0]+"\u00B0"+d2dms(tarLat)[1]+"\'"+d2dms(tarLat)[2]+"\"";
+        }else{
+            tarLatString="N "+d2dms(tarLat)[0]+"\u00B0"+d2dms(tarLat)[1]+"\'"+d2dms(tarLat)[2]+"\"";
+        }
+        if(tarLon<0){
+            tarLonString="W "+d2dms(tarLon)[0]+"\u00B0"+d2dms(tarLon)[1]+"\'"+d2dms(tarLon)[2]+"\"";
+        }else{
+            tarLonString="E "+d2dms(tarLon)[0]+"\u00B0"+d2dms(tarLon)[1]+"\'"+d2dms(tarLon)[2]+"\"";
+        }
+        editTextLatitudes.setText(tarLatString);
+        editTextLongitudes.setText(tarLonString);
         editTextTextDescription.setText(description);
         Button button_update = findViewById(R.id.button_update);
         Button button_report = findViewById(R.id.button_report);
@@ -400,6 +412,35 @@ public class ViewGeocacheActivity extends AppCompatActivity {
 
         return s;
 
+    }
+
+    private Integer[] d2dms(double degree){
+        Integer[] dmsArray=new Integer[3];
+        try {
+            //double dd = Convert.ToDouble(str);
+            String str = "" + degree;
+            int p = str.indexOf(".");
+            int dt = Integer.parseInt(str.substring(0, p));
+            degree = degree - dt;
+            double M = degree * 60;
+            int mt = (int) M;
+            M = (M - mt) * 60;
+            if (Math.abs(M - 60) < 0.001) {//秒精确到小数点后三位，小于0.001向前进位，秒为0，分加1，分为60，度加1
+                M = 0;
+                mt = mt + 1;
+            }
+            if (mt == 60) {
+                dt = dt + 1;
+                mt = 0;
+            }
+            dmsArray[0]=dt;
+            dmsArray[1]=mt ;
+            dmsArray[2]=(int) Math.round(M);// 四舍五入 小数点前整数进位
+        } catch(Exception e)  {
+            Log.i(TAG,"Error converting");
+        }
+
+        return dmsArray;
     }
 
     private float gps2d(double lat_a,double lng_a,double lat_b,double lng_b) {

@@ -59,6 +59,10 @@
             android:exported="false"
             android:label="@string/title_activity_history_view" />
         <activity
+            android:name="com.mcmaintank.geocache.ui.geocache.ShowGeocacheActivity"
+            android:exported="false"
+            android:label="@string/title_activity_view_geocache" />
+        <activity
             android:name="com.mcmaintank.geocache.ui.geocache.CreateGeocacheActivity"
             android:exported="false"
             android:label="@string/title_activity_create_geocache" />

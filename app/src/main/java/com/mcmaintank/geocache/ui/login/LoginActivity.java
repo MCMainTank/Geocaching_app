@@ -218,8 +218,11 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putInt("status", 1);
                         editor.commit();
                         startActivity(new Intent(LoginActivity.this,ServiceSelectionActivity.class));
-                    } else {
+                    } else if(status == 3) {
                         Toast.makeText(getApplicationContext(), "Register failed, user name taken.", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Register failed, unknown issue.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 } catch (JSONException e) {
