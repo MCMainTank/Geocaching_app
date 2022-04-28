@@ -110,15 +110,15 @@ public class ManageUserActivity extends AppCompatActivity {
             item.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    Intent intent = new Intent(ManageUserActivity.this, ViewGeocacheActivity.class);
+                    Intent intent = new Intent(ManageUserActivity.this, AdminViewUserActivity.class);
                     Bundle bundle = new Bundle();
                     if(user!=null){
                         Log.i(TAG,"Fine");
                     }
 
-//                    bundle.putInt("geocacheId",geocache.getGeocacheId());
-//                    bundle.putString("geocacheLocationDescription",geocache.getDescription());
-//                    bundle.putDouble("geocacheLatitudes",geocache.getLatitudes());
+                    bundle.putInt("userId",user.getUserId().intValue());
+                    bundle.putString("username",user.getUserName());
+                    bundle.putInt("reported",user.getReported());
 //                    bundle.putDouble("geocacheLongitudes",geocache.getLongitudes());
                     intent.putExtras(bundle);
                     startActivity(intent);
