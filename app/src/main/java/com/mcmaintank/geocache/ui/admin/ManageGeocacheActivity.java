@@ -112,8 +112,8 @@ public class ManageGeocacheActivity extends AppCompatActivity {
             View view = inflater.inflate(R.layout.report_child_layout, null);
             Geocache geocache = getItem(position);
             TextView tv_id = (TextView) view.findViewById(R.id.id);
-            TextView tv_date = (TextView) view.findViewById(R.id.textView1);
-            TextView tv_reported = (TextView) view.findViewById(R.id.textView2);
+            TextView tv_date = (TextView) view.findViewById(R.id.activity_type);
+            TextView tv_reported = (TextView) view.findViewById(R.id.activity_date);
             View item = (View) view.findViewById(R.id.history_item);
             Integer geocacheId = geocache.getGeocacheId();
             Integer geocacheReported = geocache.getReported();

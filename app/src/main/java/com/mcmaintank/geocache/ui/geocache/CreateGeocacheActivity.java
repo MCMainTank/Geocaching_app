@@ -151,7 +151,7 @@ public class CreateGeocacheActivity extends AppCompatActivity {
                                     public void run(){
 
                                         RequestBody requestBody = RequestBody.create("{"+"\"username\":\""+username+"\",\"Latitudes\":\""+latitudes.toString()+"\",\"Longitudes\":\""+longitudes.toString()+"\",\"Description\":\""+geocacheDescription+"\"}", MediaType.parse("application/json"));
-                                        Request request = new Request.Builder().url("http://10.0.2.2:8080/createGeocache")
+                                        Request request = new Request.Builder().url("http://39.105.14.129:8080/createGeocache")
                                                 .post(requestBody).build();
                                         okHttpClient = new OkHttpClient();
                                         Call call = okHttpClient.newCall(request);

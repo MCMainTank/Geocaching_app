@@ -71,7 +71,7 @@ public class AdminViewUserActivity extends AppCompatActivity {
                                     public void run() {
 
                                         RequestBody requestBody = RequestBody.create("{" + "\"username\":\"" + userInfoShp.getUserName(AdminViewUserActivity.this) + "\",\"password\":\"" + userInfoShp.getUserPassword(AdminViewUserActivity.this) + "\",\"userId\":\"" + editTextID.getText().toString() + "\"}", MediaType.parse("application/json"));
-                                        Request request = new Request.Builder().url("http://10.0.2.2:8080/deleteUser")
+                                        Request request = new Request.Builder().url("http://39.105.14.129:8080/deleteUser")
                                                 .post(requestBody).build();
                                         okHttpClient = new OkHttpClient();
                                         Call call = okHttpClient.newCall(request);

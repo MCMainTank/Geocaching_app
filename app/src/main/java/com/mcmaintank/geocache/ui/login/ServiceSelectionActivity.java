@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +49,7 @@ public class ServiceSelectionActivity extends AppCompatActivity {
     private OkHttpClient okHttpClient;
     private String responseString;
     private String username;
+    private String password;
     private ArrayList list = new ArrayList();
     private List<Geocache> geocacheList = new ArrayList<Geocache>();
     private LocationManager locationManager;
@@ -88,6 +90,7 @@ public class ServiceSelectionActivity extends AppCompatActivity {
         Button button_selection_to_create = findViewById(R.id.button_selection_to_create);
         Button button_selection_to_history = findViewById(R.id.button_selection_to_history);
         Button button_selection_to_show_geocache = findViewById(R.id.button_selection_to_show_geocache);
+        Button button_selection_to_activity = findViewById(R.id.button_selection_to_activity);
         if (ActivityCompat.checkSelfPermission(ServiceSelectionActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ServiceSelectionActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -161,7 +164,7 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                     @Override
                     public void run(){
                         RequestBody requestBody = RequestBody.create("{"+"\"username\":\""+username+"\"}", MediaType.parse("application/json"));
-                        Request request = new Request.Builder().url("http://10.0.2.2:8080/getGeocacheByUserId")
+                        Request request = new Request.Builder().url("http://39.105.14.129:8080/getGeocacheByUserId")
                                 .post(requestBody).build();
                         okHttpClient = new OkHttpClient();
                         Call call = okHttpClient.newCall(request);
@@ -212,7 +215,7 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                     @Override
                     public void run(){
                         RequestBody requestBody = RequestBody.create("{"+"\"Latitudes\":\""+latitudes.toString()+"\",\"Longitudes\":\""+longitudes.toString()+"\"}", MediaType.parse("application/json"));
-                        Request request = new Request.Builder().url("http://10.0.2.2:8080/getNearestGeocache")
+                        Request request = new Request.Builder().url("http://39.105.14.129:8080/getNearestGeocache")
                                 .post(requestBody).build();
                         okHttpClient = new OkHttpClient();
                         Call call = okHttpClient.newCall(request);
@@ -225,8 +228,10 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                         try {
                             responseString = response.body().string();
                             Log.i(TAG,"Requested geocache list: "+responseString);
-                            if(responseString==null){
+                            if(responseString.equals("")){
+                                Looper.prepare();
                                 Toast.makeText(ServiceSelectionActivity.this, "We couldn't see any geocache near you, sorry:(", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
                                 return;
                             }
                             jsonArray = new JSONArray(responseString);
@@ -258,7 +263,62 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                 }.start();
             }
         });
+        button_selection_to_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                username = userInfoShp.getUserName(ServiceSelectionActivity.this);
+                password = userInfoShp.getUserPassword(ServiceSelectionActivity.this);
+                new Thread(){
+                    @Override
+                    public void run(){
+                        RequestBody requestBody = RequestBody.create("{"+"\"username\":\""+username+"\",\"password\":\"" + password +"\"}", MediaType.parse("application/json"));
+                        Request request = new Request.Builder().url("http://39.105.14.129:8080/getActivity")
+                                .post(requestBody).build();
+                        okHttpClient = new OkHttpClient();
+                        Call call = okHttpClient.newCall(request);
+                        Response response = null;
+                        try {
+                            response = call.execute();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            responseString = response.body().string();
+                            Log.i(TAG,"Requested activity list: "+responseString );
+                            jsonArray = new JSONArray(responseString);
+                            for(int i=0;i<jsonArray.length();i++){
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                Geocache geocache = new Geocache();
+                                geocache.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
+                                geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
+                                geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
+                                geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
+                                geocache.setDeleted(jsonObject.getBoolean("deleted"));
+                                geocache.setPid(parseInt(jsonObject.getString("pid")));
+                                geocacheList.add(geocache);
+                            }
+//                            System.out.println(geocacheList.get(0).getGeocacheId().toString());
+                            Intent intent = new Intent();
+                            Bundle bundle = new Bundle();
+//                            list.add(geocacheList);
+                            bundle.putString("jsonString",responseString);
+                            Log.i(TAG,"Requested geocache list: "+responseString );
+                            intent.setClass(ServiceSelectionActivity.this, ViewHistoryActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }.start();
+
+            }
+        });
+
     }
+
+
     private boolean isGpsAble(LocationManager lm) {
         return lm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) ? true : false;
     }

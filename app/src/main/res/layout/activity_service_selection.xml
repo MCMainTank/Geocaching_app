@@ -7,58 +7,64 @@
     tools:context=".ui.login.ServiceSelectionActivity">
 
     <Button
+        android:id="@+id/button_selection_to_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="76dp"
+        android:text="view activity records"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
         android:id="@+id/button_selection_to_show_geocache"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="105dp"
-        android:layout_marginTop="148dp"
+        android:layout_marginBottom="32dp"
         android:text="Show nearest geocache"
         app:layout_constraintBottom_toTopOf="@+id/button_selection_to_find_geocache"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button_selection_to_find_geocache"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="105dp"
         android:layout_marginTop="237dp"
-        android:layout_marginEnd="106dp"
         android:text="Find geocache by ID"
+        app:layout_constraintBottom_toTopOf="@+id/button_selection_to_create"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button_selection_to_create"
         android:layout_width="218dp"
         android:layout_height="48dp"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="97dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="32dp"
         android:text="Create new geocache"
         app:layout_constraintBottom_toTopOf="@+id/button_selection_to_history"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_selection_to_find_geocache"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button_selection_to_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="134dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="135dp"
+        android:layout_marginBottom="28dp"
         android:text="View history"
+        app:layout_constraintBottom_toTopOf="@+id/button_selection_to_activity"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_selection_to_create"
         tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

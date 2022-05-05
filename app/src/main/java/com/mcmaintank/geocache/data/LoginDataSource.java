@@ -44,7 +44,7 @@ public class LoginDataSource {
                     FormBody formBody = new FormBody.Builder()
                             .add("username", username).add("password", password).build();
                     RequestBody requestBody = RequestBody.create("{"+"\"username\":\""+username+"\",\"password\":\""+password+"\"}", MediaType.parse("application/json"));
-                    Request request = new Request.Builder().url("http://10.0.2.2:8080/login")
+                    Request request = new Request.Builder().url("http://39.105.14.129:8080/login")
                             .post(requestBody).build();
                     okHttpClient = new OkHttpClient();
                     Call call = okHttpClient.newCall(request);

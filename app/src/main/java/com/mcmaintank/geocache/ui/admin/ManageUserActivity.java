@@ -22,7 +22,6 @@ import com.mcmaintank.geocache.R;
 import com.mcmaintank.geocache.data.model.Geocache;
 import com.mcmaintank.geocache.data.model.User;
 import com.mcmaintank.geocache.data.model.UserInfoShp;
-import com.mcmaintank.geocache.ui.geocache.ViewGeocacheActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -100,8 +99,8 @@ public class ManageUserActivity extends AppCompatActivity {
             View view = inflater.inflate(R.layout.report_child_layout, null);
             User user = getItem(position);
             TextView tv_id = (TextView) view.findViewById(R.id.id);
-            TextView tv_username = (TextView) view.findViewById(R.id.textView1);
-            TextView tv_reported = (TextView) view.findViewById(R.id.textView2);
+            TextView tv_username = (TextView) view.findViewById(R.id.activity_type);
+            TextView tv_reported = (TextView) view.findViewById(R.id.activity_date);
             View item = (View) view.findViewById(R.id.history_item);
             tv_id.setText("User ID: "+user.getUserId().toString());
             tv_username.setText("Name: "+user.getUserName());

@@ -171,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         RequestBody requestBody = RequestBody.create("{" + "\"username\":\"" + usernameEditText.getText().toString() + "\",\"password\":\"" + passwordEditText.getText().toString() + "\"}", MediaType.parse("application/json"));
-                        Request request = new Request.Builder().url("http://10.0.2.2:8080/register")
+                        Request request = new Request.Builder().url("http://39.105.14.129:8080/register")
                                 .post(requestBody).build();
                         okHttpClient = new OkHttpClient();
                         Call call = okHttpClient.newCall(request);

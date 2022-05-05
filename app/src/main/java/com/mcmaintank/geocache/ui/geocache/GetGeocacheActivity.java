@@ -52,7 +52,7 @@ public class GetGeocacheActivity extends AppCompatActivity {
                     @Override
                     public void run(){
                         RequestBody requestBody = RequestBody.create("{"+"\"geocacheId\":\""+geocacheId+"\"}", MediaType.parse("application/json"));
-                        Request request = new Request.Builder().url("http://10.0.2.2:8080/getGeocache")
+                        Request request = new Request.Builder().url("http://39.105.14.129:8080/getGeocache")
                                 .post(requestBody).build();
                         okHttpClient = new OkHttpClient();
                         Call call = okHttpClient.newCall(request);

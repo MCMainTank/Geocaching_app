@@ -25,58 +25,72 @@
         <activity
             android:name="com.mcmaintank.geocache.ui.login.LoginActivity"
             android:exported="false"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.login.ServiceSelectionActivity"
             android:exported="false"
-            android:label="@string/title_activity_service_selection" />
+            android:label="@string/title_activity_service_selection"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.login.AdminServiceSelectionActivity"
             android:exported="false"
-            android:label="@string/title_activity_admin_service_selection" />
+            android:label="@string/title_activity_admin_service_selection"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.admin.ManageGeocacheActivity"
             android:exported="false"
-            android:label="@string/title_activity_geocache_management" />
+            android:label="@string/title_activity_geocache_management"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.admin.ManageUserActivity"
             android:exported="false"
-            android:label="@string/title_activity_user_management" />
+            android:label="@string/title_activity_user_management"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.admin.AdminGetGeocacheActivity"
             android:exported="false"
-            android:label="@string/title_activity_get_geocache" />
+            android:label="@string/title_activity_get_geocache"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.admin.AdminViewGeocacheActivity"
             android:exported="false"
-            android:label="@string/title_activity_view_geocache" />
+            android:label="@string/title_activity_view_geocache"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.admin.AdminViewUserActivity"
             android:exported="false"
-            android:label="@string/title_activity_view_user" />
+            android:label="@string/title_activity_view_user"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.geocache.ViewHistoryActivity"
             android:exported="false"
-            android:label="@string/title_activity_history_view" />
+            android:label="@string/title_activity_history_view"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.geocache.ShowGeocacheActivity"
             android:exported="false"
-            android:label="@string/title_activity_view_geocache" />
+            android:label="@string/title_activity_view_geocache"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.geocache.CreateGeocacheActivity"
             android:exported="false"
-            android:label="@string/title_activity_create_geocache" />
+            android:label="@string/title_activity_create_geocache"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.geocache.GetGeocacheActivity"
             android:exported="false"
-            android:label="@string/title_activity_get_geocache" />
+            android:label="@string/title_activity_get_geocache"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.ui.geocache.ViewGeocacheActivity"
             android:exported="false"
-            android:label="@string/title_activity_view_geocache"/>
+            android:label="@string/title_activity_view_geocache"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.mcmaintank.geocache.MainActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

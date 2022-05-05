@@ -90,6 +90,7 @@ public class ArrowView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        mArrowPaint.setAntiAlias(true);
         canvas.drawPoint(x,y,mCententPaint);
         canvas.setDrawFilter(mDrawFilter);
         canvas.rotate(rotate,x,y);
