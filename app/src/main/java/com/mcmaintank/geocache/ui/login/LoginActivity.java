@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -53,6 +55,13 @@ public class LoginActivity extends AppCompatActivity {
     private OkHttpClient okHttpClient;
     private String responseString;
     private Integer status;
+    private InputFilter filter=new InputFilter() {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            if(source.equals(" ")||source.toString().contentEquals("\n"))return "";
+            else return null;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,9 @@ public class LoginActivity extends AppCompatActivity {
         final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
 
+
+        usernameEditText.setFilters(new InputFilter[]{filter});
+        passwordEditText.setFilters(new InputFilter[]{filter});
 
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {

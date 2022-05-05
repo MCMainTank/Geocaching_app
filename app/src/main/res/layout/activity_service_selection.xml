@@ -23,7 +23,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Show nearest geocache"
+        android:text="Show nearby geocache"
         app:layout_constraintBottom_toTopOf="@+id/button_selection_to_find_geocache"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"

@@ -68,6 +68,11 @@
             android:label="@string/title_activity_history_view"
             android:screenOrientation="portrait"/>
         <activity
+            android:name="com.mcmaintank.geocache.ui.geocache.ViewActivityActivity"
+            android:exported="false"
+            android:label="@string/title_activity_history_view"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name="com.mcmaintank.geocache.ui.geocache.ShowGeocacheActivity"
             android:exported="false"
             android:label="@string/title_activity_view_geocache"

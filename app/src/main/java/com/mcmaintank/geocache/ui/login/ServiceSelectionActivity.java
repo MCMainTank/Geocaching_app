@@ -23,11 +23,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.mcmaintank.geocache.R;
+import com.mcmaintank.geocache.data.model.Activity;
 import com.mcmaintank.geocache.data.model.Geocache;
 import com.mcmaintank.geocache.data.model.UserInfoShp;
 import com.mcmaintank.geocache.ui.geocache.CreateGeocacheActivity;
 import com.mcmaintank.geocache.ui.geocache.GetGeocacheActivity;
 import com.mcmaintank.geocache.ui.geocache.ShowGeocacheActivity;
+import com.mcmaintank.geocache.ui.geocache.ViewActivityActivity;
 import com.mcmaintank.geocache.ui.geocache.ViewHistoryActivity;
 
 import org.json.JSONArray;
@@ -52,6 +54,7 @@ public class ServiceSelectionActivity extends AppCompatActivity {
     private String password;
     private ArrayList list = new ArrayList();
     private List<Geocache> geocacheList = new ArrayList<Geocache>();
+    private List<Activity> activityList = new ArrayList<Activity>();
     private LocationManager locationManager;
     private String locationProvider;
     private Double latitudes;
@@ -138,8 +141,6 @@ public class ServiceSelectionActivity extends AppCompatActivity {
             return;
         }
         Log.i(TAG,location.toString());
-        latitudes = location.getLatitude();
-        longitudes = location.getLongitude();
         button_selection_to_find_geocache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,27 +178,36 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                         try {
                             responseString = response.body().string();
                             Log.i(TAG,"Requested geocache list: "+responseString );
-                            jsonArray = new JSONArray(responseString);
-                            for(int i=0;i<jsonArray.length();i++){
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Geocache geocache = new Geocache();
-                                geocache.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
-                                geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
-                                geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
-                                geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
-                                geocache.setDeleted(jsonObject.getBoolean("deleted"));
-                                geocache.setPid(parseInt(jsonObject.getString("pid")));
-                                geocacheList.add(geocache);
-                            }
+                            if(responseString.equals("[]")){
+                                Looper.prepare();
+                                Toast.makeText(ServiceSelectionActivity.this, "There is no record of your history in the database, click \"CREATE NEW GEOCACHE\" to create your first geocache!", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                                return;
+                            }else{
+                                jsonArray = new JSONArray(responseString);
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    Geocache geocache = new Geocache();
+                                    geocache.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
+                                    geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
+                                    geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
+                                    geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
+                                    geocache.setDeleted(jsonObject.getBoolean("deleted"));
+                                    geocache.setPid(parseInt(jsonObject.getString("pid")));
+                                    geocacheList.add(geocache);
+                                }
 //                            System.out.println(geocacheList.get(0).getGeocacheId().toString());
-                            Intent intent = new Intent();
-                            Bundle bundle = new Bundle();
+
+                                Intent intent = new Intent();
+                                Bundle bundle = new Bundle();
 //                            list.add(geocacheList);
-                            bundle.putString("jsonString",responseString);
-                            Log.i(TAG,"Requested geocache list: "+responseString );
-                            intent.setClass(ServiceSelectionActivity.this, ViewHistoryActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
+                                bundle.putString("jsonString",responseString);
+                                Log.i(TAG,"Requested geocache list: "+responseString );
+                                intent.setClass(ServiceSelectionActivity.this, ViewHistoryActivity.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -214,6 +224,8 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                 new Thread(){
                     @Override
                     public void run(){
+                        latitudes = location.getLatitude();
+                        longitudes = location.getLongitude();
                         RequestBody requestBody = RequestBody.create("{"+"\"Latitudes\":\""+latitudes.toString()+"\",\"Longitudes\":\""+longitudes.toString()+"\"}", MediaType.parse("application/json"));
                         Request request = new Request.Builder().url("http://39.105.14.129:8080/getNearestGeocache")
                                 .post(requestBody).build();
@@ -228,33 +240,35 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                         try {
                             responseString = response.body().string();
                             Log.i(TAG,"Requested geocache list: "+responseString);
-                            if(responseString.equals("")){
+                            if(responseString.equals("[]")){
                                 Looper.prepare();
                                 Toast.makeText(ServiceSelectionActivity.this, "We couldn't see any geocache near you, sorry:(", Toast.LENGTH_SHORT).show();
                                 Looper.loop();
                                 return;
-                            }
-                            jsonArray = new JSONArray(responseString);
-                            for(int i=0;i<jsonArray.length();i++){
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Geocache geocache = new Geocache();
-                                geocache.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
-                                geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
-                                geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
-                                geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
-                                geocache.setDeleted(jsonObject.getBoolean("deleted"));
-                                geocache.setPid(parseInt(jsonObject.getString("pid")));
-                                geocacheList.add(geocache);
-                            }
+                            }else{
+                                jsonArray = new JSONArray(responseString);
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    Geocache geocache = new Geocache();
+                                    geocache.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
+                                    geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
+                                    geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
+                                    geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
+                                    geocache.setDeleted(jsonObject.getBoolean("deleted"));
+                                    geocache.setPid(parseInt(jsonObject.getString("pid")));
+                                    geocacheList.add(geocache);
+                                }
 //                            System.out.println(geocacheList.get(0).getGeocacheId().toString());
-                            Intent intent = new Intent();
-                            Bundle bundle = new Bundle();
+                                Intent intent = new Intent();
+                                Bundle bundle = new Bundle();
 //                            list.add(geocacheList);
-                            bundle.putString("jsonString",responseString);
-                            Log.i(TAG,"Requested geocache list: "+responseString );
-                            intent.setClass(ServiceSelectionActivity.this, ShowGeocacheActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
+                                bundle.putString("jsonString",responseString);
+                                Log.i(TAG,"Requested geocache list: "+responseString );
+                                intent.setClass(ServiceSelectionActivity.this, ShowGeocacheActivity.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -285,27 +299,33 @@ public class ServiceSelectionActivity extends AppCompatActivity {
                         try {
                             responseString = response.body().string();
                             Log.i(TAG,"Requested activity list: "+responseString );
-                            jsonArray = new JSONArray(responseString);
-                            for(int i=0;i<jsonArray.length();i++){
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Geocache geocache = new Geocache();
-                                geocache.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
-                                geocache.setDescription(jsonObject.getString("geocacheLocationDescription"));
-                                geocache.setLatitudes(jsonObject.getDouble("geocacheLatitudes"));
-                                geocache.setLongitudes(jsonObject.getDouble("geocacheLongitudes"));
-                                geocache.setDeleted(jsonObject.getBoolean("deleted"));
-                                geocache.setPid(parseInt(jsonObject.getString("pid")));
-                                geocacheList.add(geocache);
-                            }
+                            if(responseString.equals("[]")){
+                                Looper.prepare();
+                                Toast.makeText(ServiceSelectionActivity.this, "It seems that you did not participate in any activities.", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                                return;
+                            }else{
+                                jsonArray = new JSONArray(responseString);
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    Activity activity = new Activity();
+                                    activity.setActivityId(parseInt(jsonObject.getString("activityId")));
+                                    activity.setActivityType(jsonObject.getString("activityType"));
+                                    activity.setGeocacheId(parseInt(jsonObject.getString("geocacheId")));
+                                    activity.setUserId(parseInt(jsonObject.getString("userId")));
+                                    activityList.add(activity);
+                                }
 //                            System.out.println(geocacheList.get(0).getGeocacheId().toString());
-                            Intent intent = new Intent();
-                            Bundle bundle = new Bundle();
+                                Intent intent = new Intent();
+                                Bundle bundle = new Bundle();
 //                            list.add(geocacheList);
-                            bundle.putString("jsonString",responseString);
-                            Log.i(TAG,"Requested geocache list: "+responseString );
-                            intent.setClass(ServiceSelectionActivity.this, ViewHistoryActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
+                                bundle.putString("jsonString",responseString);
+                                Log.i(TAG,"Requested activity list: "+responseString );
+                                intent.setClass(ServiceSelectionActivity.this, ViewActivityActivity.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

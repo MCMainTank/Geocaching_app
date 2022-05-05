@@ -253,6 +253,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
                                             @Override
                                             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                                                 responseString = response.body().string();
+                                                Toast.makeText(getApplicationContext(), "Successfully updated.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
 
@@ -331,8 +332,11 @@ public class ViewGeocacheActivity extends AppCompatActivity {
                                     if(status == 1){
                                         Toast.makeText(getApplicationContext(), "Successfully reported.", Toast.LENGTH_SHORT).show();
                                         return;
-                                    }else{
+                                    }else if(status == 0){
                                         Toast.makeText(getApplicationContext(), "User does not exist or not successfully logged in.", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }else{
+                                        Toast.makeText(getApplicationContext(), "You cannot report geocache created by yourself.", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
 
@@ -356,7 +360,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
         button_found_it.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(ViewGeocacheActivity.this).setTitle("Have you found the geocache entry?")
+                new AlertDialog.Builder(ViewGeocacheActivity.this).setTitle("Have you found the geocache?")
                         .setIcon(android.R.drawable.ic_dialog_info)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -371,7 +375,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
 
-                                        RequestBody requestBody = RequestBody.create("{" + "\"username\":\"" + userInfoShp.getUserName(ViewGeocacheActivity.this) + "\",\"password\":\"" + userInfoShp.getUserPassword(ViewGeocacheActivity.this) + "\",\"geocacheId\":\"" + editTextTextID.getText().toString() + "\"}", MediaType.parse("application/json"));
+                                        RequestBody requestBody = RequestBody.create("{" + "\"username\":\"" + userInfoShp.getUserName(ViewGeocacheActivity.this) + "\",\"password\":\"" + userInfoShp.getUserPassword(ViewGeocacheActivity.this) + "\",\"geocacheId\":\"" + editTextTextID.getText().toString() + "\",\"contents\":\"" + "I found it!" + "\",\"type\":\"" + "FOUND" + "\"}", MediaType.parse("application/json"));
                                         Request request = new Request.Builder().url("http://39.105.14.129:8080/createActivity")
                                                 .post(requestBody).build();
                                         okHttpClient = new OkHttpClient();
@@ -379,7 +383,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
                                         call.enqueue(new Callback() {
                                             @Override
                                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                                Log.i(TAG, "Update failed.");
+                                                Log.i(TAG, "Submit failed.");
                                             }
 
                                             @Override
@@ -393,9 +397,15 @@ public class ViewGeocacheActivity extends AppCompatActivity {
                                 try {
                                     sleep(700);
                                     JSONObject jsonObject = new JSONObject(responseString);
-                                    status = jsonObject.getInt("kstatus");
-                                    if(status == 1){
-                                        Toast.makeText(getApplicationContext(), "Successfully submitted.", Toast.LENGTH_SHORT).show();
+                                    status = jsonObject.getInt("generatedKey");
+                                    if(status > 0){
+                                        Toast.makeText(getApplicationContext(), "Activity successfully submitted.", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }else if(status==-1){
+                                        Toast.makeText(getApplicationContext(), "You cannot find geocache created by yourself!", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }else if(status==-2){
+                                        Toast.makeText(getApplicationContext(), "You have found this geocache.", Toast.LENGTH_SHORT).show();
                                         return;
                                     }else{
                                         Toast.makeText(getApplicationContext(), "User does not exist or not successfully logged in.", Toast.LENGTH_SHORT).show();
@@ -444,7 +454,7 @@ public class ViewGeocacheActivity extends AppCompatActivity {
 //            arrowView.rotate = azimuth-azimuth_old;
             arrowView.rotate = azimuth-degree;
             arrowView.setRotation(arrowView.rotate);
-            Log.i(TAG,""+arrowView.rotate);
+//            Log.i(TAG,""+arrowView.rotate);
             arrowView.postInvalidate();
             azimuth_old = azimuth;
             if(distance>5){

@@ -97,7 +97,7 @@ public class ArrowView extends View {
         canvas.drawLine(x,mRectf.top + 30, x  , mRectf.top - 30,mCententPaint);
         curPos = 0;
         mCententPaint.setTextSize(50);
-        Log.i(TAG,"Draw successful");
+//        Log.i(TAG,"Draw successful");
     }
 
     @Override

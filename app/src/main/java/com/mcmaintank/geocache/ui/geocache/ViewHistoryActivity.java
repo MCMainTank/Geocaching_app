@@ -76,7 +76,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
 //        Bundle bundle = intent.getExtras();
 //        list = bundle.getParcelableArrayList("list");
 //        geocacheList= (ArrayList<Geocache>) list.get(0);
-        System.out.println(geocacheList.get(0).getGeocacheId().toString());
+//        System.out.println(geocacheList.get(0).getGeocacheId().toString());
 //        GetGeocacheList getGeocacheList = new GetGeocacheList();
 //        new Thread(getGeocacheList).start();
 //        try {
